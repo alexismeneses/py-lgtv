@@ -1,0 +1,53 @@
+#!/usr/bin/env python
+
+#####
+# Command line interface to drive an LG TV connected to the serial port
+# Run with --help to get some help
+#####
+
+import sys, os, getopt, lgtv
+
+def usage():
+	print("")
+	print(os.path.basename(__file__) + " -d device [command]")
+	print("")
+	print("Where command can be")
+	print("")
+	print("  on : power on")
+	print("  off : power off")
+	print("  input dtv|tv|rgb|hdmiX|avX|component : switch to the given input source")
+	print("  sound XX : set the sound to XX%")
+	print("")
+	print("if command is omitted, the current status is displayed")
+	print("")
+
+def main():
+	device = '/dev/ttyS0'
+	opts, args = getopt.getopt(sys.argv[1:],"d:h:", ["device=", "help"])
+	for o, v in opts:
+		if o in ('-d', '--device'):
+			device = v
+		if o in ('-h', '--help'):
+			usage()
+			return
+
+	if not os.path.exists(device):
+		print("Device " + device + " does not exists. Please check or specify --device argument (use --help for help)")
+		return
+
+	lg = lgtv.LGTV(device)
+	if len(args) == 0:
+		print("Status")
+		print("\tpowered: " + str(lg.ispowered()))
+		print("\tsound: " + str(lg.getsound()))
+		print("\tsource: " + str(lg.getsource()))
+	elif args[0] == 'on':
+		lg.on()
+	elif args[0] == 'off':
+		lg.off()
+	elif args[0] == 'input':
+		lg.setsource(args[1])
+	elif args[0] == 'sound':
+		lg.setsound(int(args[1]))
+
+main()

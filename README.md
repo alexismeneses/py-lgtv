@@ -35,4 +35,23 @@ lg.setsource(lgtv.LG_SOURCE_HDMI1)
 lg.setsound(20)
 ```
 
+Command Line Interface
+----------------------
+
+You can also use this as a CLI tool, driving your TV from the command line
+
+Print the status of the TV connected to the first USB/serial dongle (ttyUSB0)
+```shell
+$ lgtv --device=/dev/ttyUSB0
+```
+
+Change the input source to Digital TV
+```shell
+$ lgtv --device=/dev/ttyS0 source dtv
+```
+
+Set the sound to 1%
+```shell
+$ lgtv --device=/dev/ttyS0 sound 1
+```
 

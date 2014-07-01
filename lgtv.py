@@ -21,6 +21,21 @@ LG_SOURCE_HDMI1 = 7
 LG_SOURCE_HDMI2 = 8
 LG_SOURCE_HDMI3 = 9
 
+LG_MAP_SOURCES = {
+	"dtv": LG_SOURCE_DTV,
+	"tv": LG_SOURCE_TV,
+	"av1": LG_SOURCE_AV1,
+	"av2": LG_SOURCE_AV2,
+	"av3": LG_SOURCE_AV3,
+	"component": LG_SOURCE_COMP,
+	"rgb": LG_SOURCE_RGB,
+	"hdmi1": LG_SOURCE_HDMI1,
+	"hdmi2": LG_SOURCE_HDMI2,
+	"hdmi3": LG_SOURCE_HDMI3,
+} 
+
+LG_MAP_SOURCES_INV = {v:k for k,v in LG_MAP_SOURCES.items()}
+
 class LGTV:
 	def __init__(self, device, tvid=0):
 		self.serial = serial.Serial(device, 9600, timeout=15)
@@ -28,8 +43,6 @@ class LGTV:
 
 
 	def reset(self):
-		#for i in range(1,10):
-		#	self.serial.write("\x00\xa4M.....>>\n")
 		self.serial.write(".\n")
 
 
@@ -113,11 +126,20 @@ class LGTV:
 		return not bool(self.status(LG_CMD_MUTE))
 
 
-	def setsource(self, srcnum):
+	def setsource(self, input_source):
 		"""
 		Change the source (aka Input) of the TV
 		The argument must be on of LG_SOURCE_XXX constants
 		"""
+
+		if isinstance(input_source, str):
+			str_source = input_source.lower()
+			if str_source in LG_MAP_SOURCES:
+				srcnum = LG_MAP_SOURCES[str_source]
+			else:
+				raise Exception('Unsupported input: ' + str_source)
+		else:
+			srcnum = input_source
 
 		self.cmd(LG_CMD_SOURCE, srcnum)
 
@@ -127,7 +149,7 @@ class LGTV:
 		Returns the current source of the TV
 		"""
 
-		return self.status(LG_CMD_SOURCE)
+		return LG_MAP_SOURCES_INV[self.status(LG_CMD_SOURCE)]
 
 
 	def setsound(self, value):
@@ -148,6 +170,7 @@ class LGTV:
 			value += 1
 		self.setsound(value)
 
+
 	def sounddown(self):
 		"""
 		Decrease sound volume by 1
@@ -157,6 +180,7 @@ class LGTV:
 		if value > 0:
 			value -= 1
 		self.setsound(value)
+
 
 	def getsound(self):
 		"""
