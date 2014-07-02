@@ -13,8 +13,21 @@ Requirements
 py-lgtv require [pySerial](http://pyserial.sourceforge.net/) (also called [python-serial](https://packages.debian.org/fr/wheezy/python-serial) on Debian)
 
 
-Library Usage
--------------
+Installation
+------------
+
+Download the latest source code
+
+    git clone https://github.com/alexismeneses/py-lgtv
+
+
+To install the module, run the following as root (usually with sudo)
+
+    python setup.py install
+
+
+Python Library Usage
+--------------------
 
 ```python
 import lgtv
@@ -35,23 +48,24 @@ lg.setsource(lgtv.LG_SOURCE_HDMI1)
 lg.setsound(20)
 ```
 
+
 Command Line Interface
 ----------------------
 
-You can also use this as a CLI tool, driving your TV from the command line
+You can also use py-lgtv as a CLI tool, driving your TV from the command line or shell script
 
 Print the status of the TV connected to the first USB/serial dongle (ttyUSB0)
-```shell
-$ lgtv --device=/dev/ttyUSB0
+```Shell
+lgtv --device=/dev/ttyUSB0
 ```
 
 Change the input source to Digital TV
-```shell
-$ lgtv --device=/dev/ttyS0 source dtv
+```Shell
+lgtv --device=/dev/ttyS0 source dtv
 ```
 
 Set the sound to 1%
-```shell
-$ lgtv --device=/dev/ttyS0 sound 1
+```Shell
+lgtv --device=/dev/ttyS0 sound 1
 ```
 

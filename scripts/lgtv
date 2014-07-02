@@ -45,7 +45,7 @@ def main():
 		lg.on()
 	elif args[0] == 'off':
 		lg.off()
-	elif args[0] == 'input':
+	elif args[0] == 'source':
 		lg.setsource(args[1])
 	elif args[0] == 'sound':
 		lg.setsound(int(args[1]))
